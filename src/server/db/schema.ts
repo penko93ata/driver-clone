@@ -1,5 +1,6 @@
+import "server-only";
+
 import {
-  int,
   text,
   index,
   singlestoreTableCreator,
@@ -16,9 +17,9 @@ export const files = createTable(
     id: bigint("id", { mode: "number", unsigned: true })
       .primaryKey()
       .autoincrement(),
-    name: text("name"),
-    size: text("size"),
-    url: text("url"),
+    name: text("name").notNull(),
+    size: text("size").notNull(),
+    url: text("url").notNull(),
     parent: bigint("parent", { mode: "number", unsigned: true }).notNull(),
   },
   (t) => {
