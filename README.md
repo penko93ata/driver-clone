@@ -10,6 +10,6 @@
 
 ## Notes 15.03.2025
 
-- [ ] Changes folders to link components, remove all client state
+- [x] Changes folders to link components, remove all client state
 - [ ] Clean up the database and database fetching patterns
 - [ ] Real homepage
