@@ -1,12 +1,12 @@
 "use client";
 
 import { ChevronRight } from "lucide-react";
-import { FileRow, FolderRow } from "./file-row";
 import type { files_table, folders_table } from "~/server/db/schema";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { UploadButton } from "~/components/uploadthing";
 import { useRouter } from "next/navigation";
+import { FileRow, FolderRow } from "./file-row";
 
 export default function DriveContents(props: {
   files: (typeof files_table.$inferInsert)[];
