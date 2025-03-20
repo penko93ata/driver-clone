@@ -5,7 +5,7 @@ import {
   files_table as filesSchema,
   folders_table as foldersSchema,
 } from "~/server/db/schema";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 export const QUERIES = {
   getAllParentsForFolder: async (folderId: number) => {
@@ -37,13 +37,15 @@ export const QUERIES = {
     return db
       .select()
       .from(foldersSchema)
-      .where(eq(foldersSchema.parent, folderId));
+      .where(eq(foldersSchema.parent, folderId))
+      .orderBy(asc(foldersSchema.id));
   },
   getFiles: async (folderId: number) => {
     return db
       .select()
       .from(filesSchema)
-      .where(eq(filesSchema.parent, folderId));
+      .where(eq(filesSchema.parent, folderId))
+      .orderBy(asc(filesSchema.id));
   },
 };
 
