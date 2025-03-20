@@ -8,5 +8,11 @@
 - [x] Add file uploading
 - [x] Add analytics
 - [x] Make sure the order is consistent
-- [ ] Add delete
+- [x] Add delete
 - [ ] Real homepage + onboarding
+
+## Fun follow ups
+
+### Folder deletions
+
+Make sure to fetch all of the folders that have it as a parent and their children too

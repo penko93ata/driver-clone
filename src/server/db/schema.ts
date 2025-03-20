@@ -20,6 +20,7 @@ export const files_table = createTable(
     ownerId: text("owner_id").notNull(),
     name: text("name").notNull(),
     size: int("size").notNull(),
+    // fileKey: text("file_key").notNull(),
     url: text("url").notNull(),
     parent: bigint("parent", { mode: "number", unsigned: true }).notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
