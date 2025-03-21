@@ -5,10 +5,24 @@ import {
   files_table as filesSchema,
   folders_table as foldersSchema,
 } from "~/server/db/schema";
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq, isNull } from "drizzle-orm";
 
 export const QUERIES = {
-  getAllParentsForFolder: async (folderId: number) => {
+  getFolders: function (folderId: number) {
+    return db
+      .select()
+      .from(foldersSchema)
+      .where(eq(foldersSchema.parent, folderId))
+      .orderBy(foldersSchema.id);
+  },
+  getFiles: function (folderId: number) {
+    return db
+      .select()
+      .from(filesSchema)
+      .where(eq(filesSchema.parent, folderId))
+      .orderBy(filesSchema.id);
+  },
+  getAllParentsForFolder: async function (folderId: number) {
     const parents = [];
     let currentId: number | null = folderId;
     while (currentId !== null) {
@@ -18,34 +32,29 @@ export const QUERIES = {
         .where(eq(foldersSchema.id, currentId));
 
       if (!folder[0]) {
-        throw new Error("Folder not found");
+        throw new Error("Parent folder not found");
       }
-
       parents.unshift(folder[0]);
       currentId = folder[0]?.parent;
     }
-
     return parents;
   },
-  getFolderById: async (folderId: number) => {
-    return db
+  getFolderById: async function (folderId: number) {
+    const folder = await db
       .select()
       .from(foldersSchema)
       .where(eq(foldersSchema.id, folderId));
+    return folder[0];
   },
-  getFolders: async (folderId: number) => {
-    return db
+
+  getRootFolderForUser: async function (userId: string) {
+    const folder = await db
       .select()
       .from(foldersSchema)
-      .where(eq(foldersSchema.parent, folderId))
-      .orderBy(asc(foldersSchema.id));
-  },
-  getFiles: async (folderId: number) => {
-    return db
-      .select()
-      .from(filesSchema)
-      .where(eq(filesSchema.parent, folderId))
-      .orderBy(asc(filesSchema.id));
+      .where(
+        and(eq(foldersSchema.ownerId, userId), isNull(foldersSchema.parent)),
+      );
+    return folder[0];
   },
 };
 
