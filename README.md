@@ -10,6 +10,7 @@
 - [x] Make sure the order is consistent
 - [x] Add delete
 - [x] Real homepage + onboarding
+- [x] Check if user is owner before showing the folder
 
 ## Fun follow ups
 
@@ -25,7 +26,7 @@ Make a server action that takes a name and parentId, and creates a folder with t
 
 (Optional) Make a server action that takes a name and folderId, and renames the folder with that name and folderId
 
-### Access control
+### Access control (DONE)
 
 Check if user is owner before showing the folder
 

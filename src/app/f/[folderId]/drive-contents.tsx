@@ -23,9 +23,7 @@ export default function DriveContents(props: {
       <div className="mx-auto max-w-6xl">
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center">
-            <Link href="/f/1" className="mr-2 text-gray-300 hover:text-white">
-              My Drive
-            </Link>
+            <h3 className="mr-2 text-gray-300">My Drive</h3>
             {parents.map((folder) => (
               <div key={folder.id} className="flex items-center">
                 <ChevronRight className="mx-2 text-gray-500" size={16} />
@@ -38,13 +36,6 @@ export default function DriveContents(props: {
               </div>
             ))}
           </div>
-          {/* <Button
-            onClick={handleUpload}
-            className="bg-blue-600 text-white hover:bg-blue-700"
-          >
-            <Upload className="mr-2" size={20} />
-            Upload
-          </Button> */}
           <div>
             <SignedOut>
               <SignInButton />
