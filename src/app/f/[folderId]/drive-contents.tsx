@@ -8,6 +8,20 @@ import { FileRow, FolderRow } from "./file-row";
 import { Button } from "~/components/ui/button";
 import { createFolder } from "~/server/actions";
 import { DriveBreadcrumbs } from "./drive-breadcrumbs";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from "~/components/ui/dialog";
+import {
+  DialogClose,
+  DialogDescription,
+  DialogTitle,
+} from "@radix-ui/react-dialog";
+import { Label } from "~/components/ui/label";
+import { Input } from "~/components/ui/input";
 
 export default function DriveContents(props: {
   files: (typeof files_table.$inferInsert)[];
@@ -59,10 +73,44 @@ export default function DriveContents(props: {
           input={{ folderId: currentFolderId }}
           onClientUploadComplete={() => navigate.refresh()}
         />
-        <form action={createFolder}>
-          <input type="hidden" name="parentFolderId" value={currentFolderId} />
-          <Button type="submit">Create new folder</Button>
-        </form>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>Create New Folder</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Create new folder</DialogTitle>
+              <DialogDescription>
+                Create a new folder in {currentFolderId}
+              </DialogDescription>
+            </DialogHeader>
+            <form action={createFolder} id="createFolderForm">
+              <input
+                type="hidden"
+                name="parentFolderId"
+                value={currentFolderId}
+              />
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="folderName" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  id="folderName"
+                  name="folderName"
+                  className="col-span-3"
+                />
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="button">Cancel</Button>
+                </DialogClose>
+                <Button form="createFolderForm" type="submit">
+                  Create
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

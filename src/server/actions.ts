@@ -52,6 +52,7 @@ export async function createFolder(formData: FormData) {
   const session = await auth();
 
   const parentId = formData.get("parentFolderId");
+  const name = formData.get("folderName");
 
   if (!session.userId) {
     return redirect("/sign-in");
@@ -59,7 +60,7 @@ export async function createFolder(formData: FormData) {
 
   const folderId = await MUTATIONS.createFolder({
     folder: {
-      name: "New Folder",
+      name: name as string,
       parent: parentId ? Number(parentId) : null,
     },
     userId: session.userId,
