@@ -11,6 +11,8 @@
 - [x] Add delete
 - [x] Real homepage + onboarding
 - [x] Check if user is owner before showing the folder
+- [x] Add folder creation
+- [] Folder (creation dialog and name input)
 
 ## Fun follow ups
 
@@ -20,7 +22,7 @@ Make sure to fetch all of the folders that have it as a parent and their childre
 
 ### Folder creations
 
-Make a server action that takes a name and parentId, and creates a folder with that name and parentId (don't forget to set the ownerId to the current user)
+Make a server action that takes a name and parentId, and creates a folder with that name and parentId (don't forget to set the ownerId to the current user) (DONE)
 
 ### Folder renames???
 
