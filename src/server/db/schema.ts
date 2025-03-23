@@ -6,6 +6,7 @@ import {
   int,
   timestamp,
 } from "drizzle-orm/singlestore-core";
+import { z } from "zod";
 
 export const createTable = singlestoreTableCreator(
   (name) => `drive_tutorial_${name}`,
@@ -55,3 +56,8 @@ export const folders_table = createTable(
 );
 
 export type DB_FolderType = typeof folders_table.$inferSelect;
+
+export const folderCreationSchema = z.object({
+  name: z.string().min(1).max(255),
+  parent: z.number().min(1),
+});

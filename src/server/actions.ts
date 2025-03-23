@@ -2,12 +2,12 @@
 
 import { and, eq } from "drizzle-orm";
 import { db } from "./db";
-import { files_table } from "./db/schema";
+import { files_table, folderCreationSchema } from "./db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { UTApi } from "uploadthing/server";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { MUTATIONS } from "./db/queries";
+import { revalidatePath } from "next/cache";
 
 const utApi = new UTApi();
 
@@ -48,14 +48,40 @@ export async function deleteFile(id: number) {
   return { success: true };
 }
 
-export async function createFolder(formData: FormData) {
+export type FormState = {
+  message: string;
+  fields?: Record<string, string[]>;
+  issues?: string[];
+};
+
+export async function createFolder(
+  prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const session = await auth();
 
   const parentId = formData.get("parentFolderId");
   const name = formData.get("folderName");
 
+  const parsed = folderCreationSchema.safeParse({
+    name: name,
+    parent: Number(parentId),
+  });
+
+  if (!parsed.success) {
+    const fields: Record<string, string[]> = {};
+    Array.from(formData.entries()).forEach(([key, value]) => {
+      fields[key] = [value.toString()];
+    });
+    return {
+      message: "Invalid form data",
+      fields,
+      issues: parsed.error.issues.map((issue) => issue.message),
+    };
+  }
+
   if (!session.userId) {
-    return redirect("/sign-in");
+    return { message: "Unauthorized" };
   }
 
   const folderId = await MUTATIONS.createFolder({
@@ -66,5 +92,7 @@ export async function createFolder(formData: FormData) {
     userId: session.userId,
   });
 
-  return redirect(`/f/${folderId}`);
+  revalidatePath(`/f/${parentId}`);
+
+  return { message: "Folder created successfully" };
 }

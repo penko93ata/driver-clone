@@ -22,6 +22,8 @@ import {
 } from "@radix-ui/react-dialog";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
+import { useActionState, useEffect, useState } from "react";
+import { X } from "lucide-react";
 
 export default function DriveContents(props: {
   files: (typeof files_table.$inferInsert)[];
@@ -32,6 +34,17 @@ export default function DriveContents(props: {
   const { files, folders, parents, currentFolderId } = props;
 
   const navigate = useRouter();
+  const [open, setOpen] = useState(false);
+
+  const [state, formAction, isPending] = useActionState(createFolder, {
+    message: "",
+  });
+
+  useEffect(() => {
+    if (!isPending && state?.message === "Folder created successfully") {
+      setOpen(false);
+    }
+  }, [isPending, state]);
 
   return (
     <div className="min-h-screen bg-gray-900 p-8 text-gray-100">
@@ -73,7 +86,7 @@ export default function DriveContents(props: {
           input={{ folderId: currentFolderId }}
           onClientUploadComplete={() => navigate.refresh()}
         />
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button>Create New Folder</Button>
           </DialogTrigger>
@@ -84,7 +97,22 @@ export default function DriveContents(props: {
                 Create a new folder in {currentFolderId}
               </DialogDescription>
             </DialogHeader>
-            <form action={createFolder} id="createFolderForm">
+            {state?.message !== "" && !state.issues && (
+              <div className="text-red-500">{state.message}</div>
+            )}
+            {state?.issues && (
+              <div className="text-red-500">
+                <ul>
+                  {state.issues.map((issue) => (
+                    <li key={issue} className="flex gap-1">
+                      <X fill="red" />
+                      {issue}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <form action={formAction} id="createFolderForm">
               <input
                 type="hidden"
                 name="parentFolderId"
@@ -104,7 +132,11 @@ export default function DriveContents(props: {
                 <DialogClose asChild>
                   <Button type="button">Cancel</Button>
                 </DialogClose>
-                <Button form="createFolderForm" type="submit">
+                <Button
+                  disabled={isPending}
+                  form="createFolderForm"
+                  type="submit"
+                >
                   Create
                 </Button>
               </DialogFooter>
