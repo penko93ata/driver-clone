@@ -1,25 +1,12 @@
 "use client";
 
-import { ChevronRight } from "lucide-react";
 import type { files_table, folders_table } from "~/server/db/schema";
-import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { UploadButton } from "~/components/uploadthing";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FileRow, FolderRow } from "./file-row";
 import { Button } from "~/components/ui/button";
-import { auth } from "@clerk/nextjs/server";
-import { MUTATIONS } from "~/server/db/queries";
 import { createFolder } from "~/server/actions";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "~/components/ui/breadcrumb";
-import { Fragment } from "react";
 import { DriveBreadcrumbs } from "./drive-breadcrumbs";
 
 export default function DriveContents(props: {
