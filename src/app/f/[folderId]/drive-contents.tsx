@@ -11,6 +11,16 @@ import { Button } from "~/components/ui/button";
 import { auth } from "@clerk/nextjs/server";
 import { MUTATIONS } from "~/server/db/queries";
 import { createFolder } from "~/server/actions";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "~/components/ui/breadcrumb";
+import { Fragment } from "react";
+import { DriveBreadcrumbs } from "./drive-breadcrumbs";
 
 export default function DriveContents(props: {
   files: (typeof files_table.$inferInsert)[];
@@ -26,21 +36,10 @@ export default function DriveContents(props: {
     <div className="min-h-screen bg-gray-900 p-8 text-gray-100">
       <div className="mx-auto max-w-6xl">
         <div className="mb-6 flex items-center justify-between">
-          <div className="flex items-center">
-            {parents.map((folder, index) => (
-              <div key={folder.id} className="flex items-center">
-                {index > 0 && (
-                  <ChevronRight className="mx-2 text-gray-500" size={16} />
-                )}
-                <Link
-                  href={`/f/${folder.id}`}
-                  className="text-gray-300 hover:text-white"
-                >
-                  {folder.name}
-                </Link>
-              </div>
-            ))}
-          </div>
+          <DriveBreadcrumbs
+            parents={parents}
+            currentFolderId={currentFolderId}
+          />
           <div>
             <SignedOut>
               <SignInButton />
