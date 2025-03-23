@@ -6,6 +6,8 @@ import { files_table } from "./db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { UTApi } from "uploadthing/server";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { MUTATIONS } from "./db/queries";
 
 const utApi = new UTApi();
 
@@ -44,4 +46,24 @@ export async function deleteFile(id: number) {
   c.set("force-refresh", JSON.stringify(Math.random()));
 
   return { success: true };
+}
+
+export async function createFolder(formData: FormData) {
+  const session = await auth();
+
+  const parentId = formData.get("parentFolderId");
+
+  if (!session.userId) {
+    return redirect("/sign-in");
+  }
+
+  const folderId = await MUTATIONS.createFolder({
+    folder: {
+      name: "New Folder",
+      parent: parentId ? Number(parentId) : null,
+    },
+    userId: session.userId,
+  });
+
+  return redirect(`/f/${folderId}`);
 }
