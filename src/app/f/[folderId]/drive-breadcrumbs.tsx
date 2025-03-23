@@ -9,7 +9,7 @@ import {
 } from "~/components/ui/breadcrumb";
 import { DB_FolderType } from "~/server/db/schema";
 
-type BreadcrumbsProps = {
+type DriveBreadcrumbsProps = {
   parents: DB_FolderType[];
   currentFolderId: number;
 };
@@ -17,7 +17,7 @@ type BreadcrumbsProps = {
 export function DriveBreadcrumbs({
   parents,
   currentFolderId,
-}: BreadcrumbsProps) {
+}: DriveBreadcrumbsProps) {
   return (
     <Breadcrumb>
       <BreadcrumbList>
