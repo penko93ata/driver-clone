@@ -24,6 +24,20 @@ import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { useActionState, useEffect, useState } from "react";
 import { X } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 
 export default function DriveContents(props: {
   files: (typeof files_table.$inferInsert)[];
@@ -81,6 +95,31 @@ export default function DriveContents(props: {
             ))}
           </ul>
         </div>
+        {/* TODO - Edit styling  */}
+        {/* TODO - Move functionality to dropdown */}
+        {/* TODO - Remove old buttons */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                New Folder
+                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                File Upload
+                <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Folder Upload
+                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <UploadButton
           endpoint="driveUploader"
           input={{ folderId: currentFolderId }}
