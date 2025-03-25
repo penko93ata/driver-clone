@@ -13,7 +13,11 @@
 - [x] Check if user is owner before showing the folder
 - [x] Add folder creation
 - [x] Add loading state when navigating between folders
-- [] Folder (creation dialog and name input)
+- [x] Folder (creation dialog and name input)
+- [ ] Update dialog styling
+- [ ] Folder rename (add option menu with a dropdown); rename brings up a dialog
+- [ ] Move create folder and upload files to dropdown menu
+- [ ] Add uploadthing dropzone
 
 ## Fun follow ups
 
@@ -21,7 +25,7 @@
 
 Make sure to fetch all of the folders that have it as a parent and their children too
 
-### Folder creations
+### Folder creations (DONE)
 
 Make a server action that takes a name and parentId, and creates a folder with that name and parentId (don't forget to set the ownerId to the current user)
 
