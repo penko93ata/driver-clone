@@ -101,6 +101,50 @@ export const MUTATIONS = {
         ),
       );
   },
+  deleteFoldersAndFiles: async function (input: {
+    folderId: number;
+    userId: string;
+  }) {
+    // await db
+    //   .delete(foldersSchema)
+    //   .where(
+    //     and(
+    //       eq(foldersSchema.id, input.folderId),
+    //       eq(foldersSchema.ownerId, input.userId),
+    //     ),
+    //   );
+
+    // Fetch all folders that have this folder as a parent
+    const folders = await db
+      .select()
+      .from(foldersSchema)
+      .where(
+        and(
+          eq(foldersSchema.parent, input.folderId),
+          eq(foldersSchema.ownerId, input.userId),
+        ),
+      );
+
+    // Delete all folders that have this folder as a parent
+    await db
+      .delete(foldersSchema)
+      .where(
+        and(
+          eq(foldersSchema.parent, input.folderId),
+          eq(foldersSchema.ownerId, input.userId),
+        ),
+      );
+
+    // Delete all files that have this folder as a parent
+    await db
+      .delete(filesSchema)
+      .where(
+        and(
+          eq(filesSchema.parent, input.folderId),
+          eq(filesSchema.ownerId, input.userId),
+        ),
+      );
+  },
   onboardUser: async function (userId: string) {
     const rootFolder = await db
       .insert(foldersSchema)

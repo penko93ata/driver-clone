@@ -132,35 +132,23 @@ export async function renameFolder(prevState: FormState, formData: FormData) {
   return { message: "Folder renamed successfully" };
 }
 
-// export async function deleteFolder(prevState: FormState, formData: FormData) {
-//   const session = await auth();
-//   if (!session.userId) {
-//     return { message: "Unauthorized" };
-//   }
+export async function deleteFolder(prevState: FormState, formData: FormData) {
+  const session = await auth();
+  if (!session.userId) {
+    return { message: "Unauthorized" };
+  }
 
-//   const folderId = formData.get("folderId");
-//   if (!folderId) {
-//     return { message: "Invalid folder ID" };
-//   }
+  const folderId = formData.get("folderId");
+  if (!folderId) {
+    return { message: "Invalid folder ID" };
+  }
 
-//   const folder = await db
-//     .select()
-//     .from(folders_table)
-//     .where(
-//       and(eq(folders_table.id, Number(folderId)), eq(folders_table.ownerId, session.userId)),
-//     );
+  await MUTATIONS.deleteFoldersAndFiles({
+    folderId: Number(folderId),
+    userId: session.userId,
+  });
 
-//   if (!folder) {
-//     return { message: "Folder not found" };
-//   }
+  revalidatePath(`/f/${folderId}`);
 
-//   await db
-//     .delete(folders_table)
-//     .where(
-//       and(eq(folders_table.id, Number(folderId)), eq(folders_table.ownerId, session.userId)),
-//     );
-
-//   revalidatePath(`/f/${folder.parent}`);
-
-//   return { message: "Folder deleted successfully" };
-// }
+  return { message: "Folder deleted successfully" };
+}

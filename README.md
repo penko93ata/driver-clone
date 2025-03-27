@@ -18,6 +18,9 @@
 - [ ] Folder rename (add option menu with a dropdown); rename brings up a dialog
 - [ ] Move create folder and upload files to dropdown menu
 - [ ] Add uploadthing dropzone
+- [x] Add folder rename mutation and action (NOT IMPLEMENTED YET)
+- [ ] Add folder rename dialog
+- [x] Folder deletion - fetch all folders that it the parent of and delete them (NOT IMPLEMENTED YET)
 
 ## Fun follow ups
 
