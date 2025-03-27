@@ -60,6 +60,10 @@ export async function createFolder(
 ): Promise<FormState> {
   const session = await auth();
 
+  if (!session.userId) {
+    return { message: "Unauthorized" };
+  }
+
   const parentId = formData.get("parentFolderId");
   const name = formData.get("folderName");
 
@@ -80,10 +84,6 @@ export async function createFolder(
     };
   }
 
-  if (!session.userId) {
-    return { message: "Unauthorized" };
-  }
-
   const folderId = await MUTATIONS.createFolder({
     folder: {
       name: name as string,
@@ -96,3 +96,71 @@ export async function createFolder(
 
   return { message: "Folder created successfully" };
 }
+
+export async function renameFolder(prevState: FormState, formData: FormData) {
+  const session = await auth();
+  if (!session.userId) {
+    return { message: "Unauthorized" };
+  }
+
+  const parentId = formData.get("parentFolderId");
+  const name = formData.get("folderName");
+
+  const parsed = folderCreationSchema.safeParse({
+    name: name,
+    parent: Number(parentId),
+  });
+
+  if (!parsed.success) {
+    const fields: Record<string, string[]> = {};
+    Array.from(formData.entries()).forEach(([key, value]) => {
+      fields[key] = [value.toString()];
+    });
+    return {
+      message: "Invalid form data",
+      fields,
+      issues: parsed.error.issues.map((issue) => issue.message),
+    };
+  }
+
+  await MUTATIONS.renameFolder({
+    folderId: Number(parentId),
+    name: name as string,
+    userId: session.userId,
+  });
+
+  return { message: "Folder renamed successfully" };
+}
+
+// export async function deleteFolder(prevState: FormState, formData: FormData) {
+//   const session = await auth();
+//   if (!session.userId) {
+//     return { message: "Unauthorized" };
+//   }
+
+//   const folderId = formData.get("folderId");
+//   if (!folderId) {
+//     return { message: "Invalid folder ID" };
+//   }
+
+//   const folder = await db
+//     .select()
+//     .from(folders_table)
+//     .where(
+//       and(eq(folders_table.id, Number(folderId)), eq(folders_table.ownerId, session.userId)),
+//     );
+
+//   if (!folder) {
+//     return { message: "Folder not found" };
+//   }
+
+//   await db
+//     .delete(folders_table)
+//     .where(
+//       and(eq(folders_table.id, Number(folderId)), eq(folders_table.ownerId, session.userId)),
+//     );
+
+//   revalidatePath(`/f/${folder.parent}`);
+
+//   return { message: "Folder deleted successfully" };
+// }
