@@ -140,6 +140,26 @@ export async function deleteFolder(folderId: number) {
 
   if (!folderId) return { error: "Folder not found" };
 
+  const files = await db
+    .select()
+    .from(files_table)
+    .where(
+      and(
+        eq(files_table.ownerId, session.userId),
+        eq(files_table.parent, folderId),
+      ),
+    );
+
+  if (files.length > 0) {
+    const utApiResponse = await utApi.deleteFiles(
+      files.map((file) => file.url.replace("https://13sqmydxbz.ufs.sh/f/", "")),
+    );
+
+    if (!utApiResponse.success) {
+      return { error: "Failed to delete files" };
+    }
+  }
+
   await MUTATIONS.deleteFoldersAndFiles({
     folderId,
     userId: session.userId,

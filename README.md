@@ -24,7 +24,7 @@
 
 ## Fun follow ups
 
-### Folder deletions
+### Folder deletions (DONE)
 
 Make sure to fetch all of the folders that have it as a parent and their children too
 

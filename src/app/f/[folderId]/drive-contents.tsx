@@ -169,15 +169,14 @@ export default function DriveContents(props: {
                 </DialogContent>
               </Dialog>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                {/* <FilePlus2 /> File Upload */}
+              {/* <DropdownMenuItem>
                 <UploadButton
                   endpoint="driveUploader"
                   input={{ folderId: currentFolderId }}
                   onClientUploadComplete={() => navigate.refresh()}
                 />
                 <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem>
                 <FolderPlus /> Folder Upload
                 <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
@@ -185,6 +184,11 @@ export default function DriveContents(props: {
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
+        <UploadButton
+          endpoint="driveUploader"
+          input={{ folderId: currentFolderId }}
+          onClientUploadComplete={() => navigate.refresh()}
+        />
       </div>
     </div>
   );
