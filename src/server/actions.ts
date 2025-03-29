@@ -45,7 +45,7 @@ export async function deleteFile(id: number) {
   const c = await cookies();
   c.set("force-refresh", JSON.stringify(Math.random()));
 
-  return { success: true };
+  return { message: "File deleted successfully" };
 }
 
 export type FormState = {

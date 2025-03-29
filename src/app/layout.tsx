@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { PostHogProvider } from "./_providers/posthog-provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Drive Clone App",
@@ -13,12 +14,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <ClerkProvider>
       <PostHogProvider>
         <html lang="en" className={`${GeistSans.variable}`}>
-          <body>{children}</body>
+          <body>
+            {children}
+            <Toaster position="top-center" richColors closeButton />
+          </body>
         </html>
       </PostHogProvider>
     </ClerkProvider>
