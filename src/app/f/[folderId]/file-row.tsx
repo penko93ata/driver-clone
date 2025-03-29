@@ -8,6 +8,7 @@ import { deleteFile, deleteFolder } from "~/server/actions";
 import { files_table, folders_table } from "~/server/db/schema";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
+import { Spinner } from "~/components/Spinner";
 
 export function FileRow(props: { file: typeof files_table.$inferInsert }) {
   const { file } = props;
@@ -44,7 +45,7 @@ export function FileRow(props: { file: typeof files_table.$inferInsert }) {
             onClick={handleDelete}
             disabled={isPending}
           >
-            <Trash2Icon size={20} />
+            {isPending ? <Spinner size="sm" /> : <Trash2Icon size={20} />}
           </Button>
         </div>
       </div>
@@ -91,7 +92,7 @@ export function FolderRow(props: {
             onClick={handleDelete}
             disabled={isPending}
           >
-            <Trash2Icon size={20} />
+            {isPending ? <Spinner size="sm" /> : <Trash2Icon size={20} />}
           </Button>
         </div>
       </div>
