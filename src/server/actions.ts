@@ -132,19 +132,16 @@ export async function renameFolder(prevState: FormState, formData: FormData) {
   return { message: "Folder renamed successfully" };
 }
 
-export async function deleteFolder(prevState: FormState, formData: FormData) {
+export async function deleteFolder(folderId: number) {
   const session = await auth();
   if (!session.userId) {
     return { message: "Unauthorized" };
   }
 
-  const folderId = formData.get("folderId");
-  if (!folderId) {
-    return { message: "Invalid folder ID" };
-  }
+  if (!folderId) return { error: "Folder not found" };
 
   await MUTATIONS.deleteFoldersAndFiles({
-    folderId: Number(folderId),
+    folderId,
     userId: session.userId,
   });
 

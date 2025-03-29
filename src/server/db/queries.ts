@@ -105,15 +105,6 @@ export const MUTATIONS = {
     folderId: number;
     userId: string;
   }) {
-    // await db
-    //   .delete(foldersSchema)
-    //   .where(
-    //     and(
-    //       eq(foldersSchema.id, input.folderId),
-    //       eq(foldersSchema.ownerId, input.userId),
-    //     ),
-    //   );
-
     // Fetch all folders that have this folder as a parent
     const folders = await db
       .select()
@@ -142,6 +133,16 @@ export const MUTATIONS = {
         and(
           eq(filesSchema.parent, input.folderId),
           eq(filesSchema.ownerId, input.userId),
+        ),
+      );
+
+    // Delete the parent folder itself
+    await db
+      .delete(foldersSchema)
+      .where(
+        and(
+          eq(foldersSchema.id, input.folderId),
+          eq(foldersSchema.ownerId, input.userId),
         ),
       );
   },
